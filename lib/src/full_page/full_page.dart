@@ -17,16 +17,16 @@ import 'package:city_pickers/src/util.dart';
 import 'package:flutter/material.dart';
 
 class FullPage extends StatefulWidget {
-  final String? locationCode;
   final ShowType showType;
   final Map<String, String> provincesData;
   final Map<String, dynamic> citiesData;
+  final String? provinceTitle;
 
   FullPage({
-    this.locationCode,
     required this.showType,
     required this.provincesData,
     required this.citiesData,
+    this.provinceTitle,
   });
 
   @override
@@ -87,11 +87,6 @@ class _FullPageState extends State<FullPage> {
         metaInfo: widget.citiesData, provincesInfo: widget.provincesData);
     itemList = provinces;
     pageStatus = Status.Province;
-    try {
-      _initLocation(widget.locationCode);
-    } catch (e) {
-      print('Exception details:\n 初始化地理位置信息失败, 请检查省分城市数据 \n $e');
-    }
   }
 
   Future<bool> back() {
@@ -105,46 +100,6 @@ class _FullPageState extends State<FullPage> {
       return Future<bool>.value(false);
     }
     return Future<bool>.value(true);
-  }
-
-  void _initLocation(String? locationCode) {
-    int _locationCode;
-    if (locationCode != null) {
-      try {
-        _locationCode = int.parse(locationCode);
-      } catch (e) {
-        print(ArgumentError(
-            "The Argument locationCode must be valid like: '100000' but get '$locationCode' "));
-        return;
-      }
-
-      targetProvince = cityTree.initTreeByCode(_locationCode);
-      if (targetProvince.isNull) {
-        targetProvince = cityTree.initTreeByCode(provinces.first.code!);
-      }
-      targetProvince.child.forEach((Point _city) {
-        if (_city.code == _locationCode) {
-          targetCity = _city;
-          targetArea = _getTargetChildFirst(_city) ?? null;
-        }
-        _city.child.forEach((Point _area) {
-          if (_area.code == _locationCode) {
-            targetCity = _city;
-            targetArea = _area;
-          }
-        });
-      });
-    } else {
-      targetProvince =
-          cityTree.initTreeByCode(int.parse(widget.provincesData.keys.first));
-    }
-
-    if (targetCity == null) {
-      targetCity = _getTargetChildFirst(targetProvince);
-    }
-    if (targetArea == null) {
-      targetArea = _getTargetChildFirst(targetCity!);
-    }
   }
 
   Result _buildResult() {
@@ -290,10 +245,13 @@ class _FullPageState extends State<FullPage> {
         });
   }
 
-  Widget _buildHead() {
+  Widget _buildHead({String? provinceTitle}) {
     String title = '请选择城市';
     switch (pageStatus) {
       case Status.Province:
+        if (provinceTitle != null) {
+          title = provinceTitle;
+        }
         break;
       case Status.City:
         title = targetProvince.name;
@@ -314,7 +272,7 @@ class _FullPageState extends State<FullPage> {
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          title: _buildHead(),
+          title: _buildHead(provinceTitle: widget.provinceTitle),
         ),
         body: SafeArea(
           bottom: true,

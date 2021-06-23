@@ -154,15 +154,13 @@ class _ShowFullPageCityPickerState extends State<ShowFullPageCityPicker> {
             onPressed: () async {
               print("locationCode $resultAttr");
               Result? tempResult = await CityPickers.showFullPageCityPicker(
-                  context: context,
-                  theme: themeAttr?.value,
-                  locationCode: resultAttr.areaId ??
-                      resultAttr.cityId ??
-                      resultAttr.provinceId ??
-                      "110000",
-                  showType: showTypeAttr.value,
-                  citiesData: customerMeta ? citiesData : null,
-                  provincesData: customerMeta ? provincesData : null);
+                context: context,
+                theme: themeAttr?.value,
+                showType: showTypeAttr.value,
+                citiesData: customerMeta ? citiesData : null,
+                provincesData: customerMeta ? provincesData : null,
+                provinceTitle: "請選擇",
+              );
               if (tempResult == null) {
                 return;
               }

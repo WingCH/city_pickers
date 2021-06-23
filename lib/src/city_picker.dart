@@ -104,9 +104,10 @@ class CityPickers {
     required BuildContext context,
     ThemeData? theme,
     ShowType showType = ShowType.pca,
-    String locationCode = '110000',
+
     Map<String, dynamic>? citiesData,
     Map<String, String>? provincesData,
+    String? provinceTitle,
   }) {
     return Navigator.push(
       context,
@@ -117,9 +118,10 @@ class CityPickers {
           data: theme ?? Theme.of(context),
           child: FullPage(
             showType: showType,
-            locationCode: locationCode,
+
             citiesData: citiesData ?? meta.citiesData,
             provincesData: provincesData ?? meta.provincesData,
+            provinceTitle: provinceTitle,
           ),
         ),
         transitionsBuilder:
