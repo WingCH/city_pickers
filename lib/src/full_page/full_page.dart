@@ -175,7 +175,7 @@ class _FullPageState extends State<FullPage> {
     int? selectId;
     switch (pageStatus) {
       case Status.Province:
-        selectId = targetProvince.code;
+        // selectId = targetProvince.code;
         break;
       case Status.City:
         selectId = targetCity?.code;
