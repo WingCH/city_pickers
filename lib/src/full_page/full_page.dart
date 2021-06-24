@@ -82,7 +82,7 @@ class _FullPageState extends State<FullPage> {
     super.initState();
 
     scrollController = new ScrollController();
-    provinces = new Provinces(metaInfo: widget.provincesData).provinces;
+    provinces = new Provinces(metaInfo: widget.provincesData, sort: false).provinces;
     cityTree = new CityTree(
         metaInfo: widget.citiesData, provincesInfo: widget.provincesData);
     itemList = provinces;
